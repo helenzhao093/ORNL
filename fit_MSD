@@ -1,9 +1,10 @@
 #!/bin/gnuplot
+#the fit is done from 200 to 8000 ps b/c of bad statistics at the beginning and end of calculations
 
 set print "diffcoeff" append #append variables to file diffcoeff
 
 f(x) = b + a*x #define function variables 
 
-fit [:][:] f(x) 'einSingleLi.out' u 1:2 via a,b #fit MSD vs Time (fs) graph with linear function 
+fit [500:8000][:] f(x) 'einSingleLi.out' u 1:2 via a,b #fit MSD vs Time (fs) graph with linear function 
 
-print a,b #print variables to file 
+print a #print variables to file 
