@@ -1,0 +1,28 @@
+#!/bin/gnuplot
+
+set terminal postscript	color
+set output '3D_plot.ps'
+set title "Diffusion Rate at Locations"
+set xlabel "x"
+set ylabel "y"
+set zlabel "z"
+
+set dgrid3d 30,30
+dataFile='collective_MSD'
+
+set table dataFile.'.grid'
+splot dataFile u 1:2:3
+unset table
+
+set table dataFile.'.color'
+splot dataFile u 1:2:4
+unset table
+
+set view 60,45
+set hidden3d
+set palette defined (0 "blue", 0.5 "white", 1 "pink")
+set autoscale cbfix
+set pm3d
+unset dgrid3d
+set ticslevel 0
+splot sprintf('< paste %s.grid %s.color', dataFile, dataFile) u 1:2:3:7 with pm3d notitle
