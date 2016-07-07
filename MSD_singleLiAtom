@@ -1,9 +1,13 @@
 #!/bin/bash
+#This file is located within the LiAtoms file in the c-Si-TEMP file
+#XDATCAR_Master is the positions of all 64 Si and 64 Li atoms at every femtosecond & located in c-Si-TEMP file
+#head_xd is the initial cell parameters & located in c-Si-Temp file & needed to run einstein_SingleLi 
 
 for i in {65..128}; do #in XDATCAR_Master file, Li Atoms locations are at index 65 to 128
 echo $i
 
 #print every 129th line starting at i and store positions in Li_Atom_i
+
 perl -ne 'print unless ('$i' != $. % 129)' ../XDATCAR_Master > LiAtom_$i #for
 
 #call einstein_singleLi to calculate MSD for Li Atom at each timeframe and store results in einSingleLi.out
@@ -11,7 +15,17 @@ cat head_einsteinSingleLi ../head_xd LiAtom_$i | ./einstein_singleLi > einSingle
 
 #linearly fit the MSD vs time data 
 gnuplot fit.gnu 
-
 done
+
+#store the location of all the Li Atoms at the first time frame in positions
+for i in {65..136} ; do 
+head -1 LiAtom_$i >> positions; 
+done
+
+#combine initial positions of the Li atom to its corresponding MSD
+paste -d' ' positions diffcoeff > toGraph
+
+#add an empty line between every line, which is needed for the pm3d runs in gnuplot
+awk ' {print;} NR % 1 == 0 { print ""; }' toGraph > toGraph2
 
 exit 
