@@ -1,0 +1,9 @@
+#!/bin/gnuplot
+
+set print "diffcoeff" append #append variables to file diffcoeff
+
+f(x) = b + a*x #define function variables 
+
+fit [:][:] f(x) 'einSingleLi.out' u 1:2 via a,b #fit MSD vs Time (fs) graph with linear function 
+
+print a,b #print variables to file 
