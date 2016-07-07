@@ -1,0 +1,17 @@
+#!/bin/bash
+
+for i in {65..128}; do #in XDATCAR_Master file, Li Atoms locations are at index 65 to 128
+echo $i
+
+#print every 129th line starting at i and store positions in Li_Atom_i
+perl -ne 'print unless ('$i' != $. % 129)' ../XDATCAR_Master > LiAtom_$i #for
+
+#call einstein_singleLi to calculate MSD for Li Atom at each timeframe and store results in einSingleLi.out
+cat head_einsteinSingleLi ../head_xd LiAtom_$i | ./einstein_singleLi > einSingleLi.out
+
+#linearly fit the MSD vs time data 
+gnuplot fit.gnu 
+
+done
+
+exit 
