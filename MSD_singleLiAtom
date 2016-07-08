@@ -28,4 +28,8 @@ paste -d' ' positions diffcoeff > toGraph
 #add an empty line between every line, which is needed for the pm3d runs in gnuplot
 awk ' {print;} NR % 1 == 0 { print ""; }' toGraph > collective_MSD
 
+gnuplot 3D_plot.gnu #make 3D diffusion maps
+
+gnuplot 2D_plot.gnu #make 2D diffusion maps
+
 exit 
